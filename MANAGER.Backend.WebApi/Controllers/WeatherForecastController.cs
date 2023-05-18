@@ -1,3 +1,4 @@
+using MANAGER.Backend.WebApi.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MANAGER.Backend.WebApi.Controllers
