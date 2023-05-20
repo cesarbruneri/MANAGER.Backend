@@ -4,14 +4,17 @@ using Moq;
 
 namespace MANAGER.Backend.UnitTests.Mocks;
 
-public class MockValidator<T> : Mock<IValidator<T>>
+public class MockValidator<T> : Mock<IValidator<T>> where T : class
 {
     public MockValidator() : base(MockBehavior.Strict) { }
 
-    public MockValidator<T> MockValidate(T user, ValidationResult validationResult)
+    public MockValidator<T> MockValidate(List<ValidationFailure>? errors)
     {
-        Setup(x => x.Validate(user))
-            .Returns(validationResult);
+        Setup(x => x.Validate(It.IsAny<T>()))
+            .Returns(new ValidationResult
+            {
+                Errors = errors ?? null,
+            });
 
         return this;
     }

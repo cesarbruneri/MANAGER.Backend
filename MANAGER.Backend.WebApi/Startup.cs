@@ -15,9 +15,10 @@ public class Startup
     {
         services.AddControllers();
         services.AddPersistence(Configuration);
+        services.ConfigureMediatorR();
+        services.AddValidatorDependenceInjection();
         services.AddDependenceInjection();
         services.AddEndpointsApiExplorer();
-        services.AddMediatorR();
         services.AddSwaggerGen();
     }
 

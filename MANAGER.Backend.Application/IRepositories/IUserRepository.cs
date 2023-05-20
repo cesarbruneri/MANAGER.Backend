@@ -1,4 +1,4 @@
-﻿using MANAGER.Backend.Core.Domain.Users;
+﻿using MANAGER.Backend.Core.Domain.Entities.Users;
 
 namespace MANAGER.Backend.Application.IRepositories;
 

@@ -1,8 +1,8 @@
 ﻿using FluentResults;
 using FluentValidation;
 using MANAGER.Backend.Application.IRepositories;
-using MANAGER.Backend.Core.Domain.Errors;
-using MANAGER.Backend.Core.Domain.Users;
+using MANAGER.Backend.Core.Domain.Entities.Users;
+using MANAGER.Backend.Core.Errors;
 using MediatR;
 
 namespace MANAGER.Backend.Application.Users.Create;
@@ -30,27 +30,10 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
 
         var valid = _validator.Validate(user);
 
-        if (valid.IsValid)
+        if (!valid.IsValid)
         {
             return Result.Fail(BadRequestError.InvalidFields());
         }
-
-        if (string.IsNullOrWhiteSpace(request.Name))
-        {
-            return Result.Fail(BadRequestError.NameIsNotEmpty());
-        };
-        if (string.IsNullOrWhiteSpace(request.LastName))
-        {
-            return Result.Fail(new Error("Teste"));
-        };
-        if (string.IsNullOrWhiteSpace(request.Email))
-        {
-            return Result.Fail(new Error("Teste"));
-        };
-        if (request.Age is 0)
-        {
-            return Result.Fail(new Error("Teste"));
-        };
 
         await _userRepository.AddAsync(user);
 

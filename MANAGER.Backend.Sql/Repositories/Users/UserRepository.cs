@@ -1,5 +1,5 @@
 ﻿using MANAGER.Backend.Application.IRepositories;
-using MANAGER.Backend.Core.Domain.Users;
+using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.Sql.Infrastructure.Context;
 using MANAGER.Backend.Sql.Repositories.Base;
 

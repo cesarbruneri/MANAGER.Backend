@@ -1,9 +1,14 @@
-﻿using MANAGER.Backend.Application.IRepositories;
+﻿using FluentResults;
+using FluentValidation;
+using MANAGER.Backend.Application.IRepositories;
+using MANAGER.Backend.Application.Users.Create;
+using MANAGER.Backend.Core.Domain.Entities.Users;
+using MANAGER.Backend.Core.Validator;
 using MANAGER.Backend.Sql.Infrastructure.Context;
 using MANAGER.Backend.Sql.Repositories.Base;
 using MANAGER.Backend.Sql.Repositories.Users;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Net.NetworkInformation;
 
 namespace MANAGER.Backend.WebApi.Extensions;
 
@@ -12,7 +17,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ManagerContext>(
-            opt => 
+            opt =>
                 opt.UseSqlServer(configuration.GetConnectionString("Default"))
                 .EnableSensitiveDataLogging());
 
@@ -27,11 +32,40 @@ public static class ServiceExtensions
         return services;
     }
 
-    public static IServiceCollection AddMediatorR(this IServiceCollection services)
+    public static IServiceCollection AddValidatorDependenceInjection(this IServiceCollection services)
     {
-        services.AddMediatR(cfg =>
-            cfg.RegisterServicesFromAssembly(typeof(Ping).Assembly));
+        services.AddTransient<IValidator<User>, UserValidator>();
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureMediatorR(this IServiceCollection services)
+    {
+        services.AddMediatR(typeof(Startup).Assembly);
+        services.AddTransient<IRequestHandler<CreateUserCommand, Result>, CreateUserCommandHandler>();
 
         return services;
     }
 }
+/*
+ System.AggregateException
+  HResult=0x80131500
+  Message=Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MANAGER.Backend.Application.Users.Create.CreateUserCommand,FluentResults.Result] Lifetime: Scoped ImplementationType: MANAGER.Backend.Application.Users.Create.CreateUserCommandHandler': Unable to resolve service for type 'FluentValidation.IValidator`1[MANAGER.Backend.Core.Domain.Entities.Users.User]' while attempting to activate 'MANAGER.Backend.Application.Users.Create.CreateUserCommandHandler'.)
+  Source=Microsoft.Extensions.DependencyInjection
+  StackTrace:
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in E:\Projects\ManagerUser\MANAGER.Backend\MANAGER.Backend.WebApi\Program.cs:line 9
+
+  This exception was originally thrown at this call stack:
+    [External Code]
+
+Inner Exception 1:
+InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MANAGER.Backend.Application.Users.Create.CreateUserCommand,FluentResults.Result] Lifetime: Scoped ImplementationType: MANAGER.Backend.Application.Users.Create.CreateUserCommandHandler': Unable to resolve service for type 'FluentValidation.IValidator`1[MANAGER.Backend.Core.Domain.Entities.Users.User]' while attempting to activate 'MANAGER.Backend.Application.Users.Create.CreateUserCommandHandler'.
+
+Inner Exception 2:
+InvalidOperationException: Unable to resolve service for type 'FluentValidation.IValidator`1[MANAGER.Backend.Core.Domain.Entities.Users.User]' while attempting to activate 'MANAGER.Backend.Application.Users.Create.CreateUserCommandHandler'.
+
+ */

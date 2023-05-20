@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using MANAGER.Backend.Core.Domain.Users;
+using MANAGER.Backend.Core.Domain.Entities.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
