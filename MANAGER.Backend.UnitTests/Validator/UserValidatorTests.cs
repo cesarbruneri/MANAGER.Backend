@@ -22,7 +22,7 @@ public class UserValidatorTests
         {
             Name = "Test",
             LastName = "Test",
-            Email = "Test",
+            Email = "test@test.com",
             Age = 1,
         };
 

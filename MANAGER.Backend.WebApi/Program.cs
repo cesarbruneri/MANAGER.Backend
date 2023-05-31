@@ -1,4 +1,6 @@
+using MANAGER.Backend.Sql.Infrastructure.Context;
 using MANAGER.Backend.WebApi;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,3 +13,5 @@ var app = builder.Build();
 startup.Configure(app, app.Environment);
 
 app.Run();
+
+public partial class Program { }

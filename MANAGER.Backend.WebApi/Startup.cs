@@ -1,4 +1,6 @@
-﻿using MANAGER.Backend.WebApi.Extensions;
+﻿using MANAGER.Backend.Sql.Infrastructure.Context;
+using MANAGER.Backend.WebApi.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace MANAGER.Backend.WebApi;
 
@@ -24,7 +26,7 @@ public class Startup
 
     public void Configure(WebApplication app, IWebHostEnvironment environment)
     {
-        if (app.Environment.IsDevelopment())
+        if (environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -33,5 +35,7 @@ public class Startup
         app.UseAuthorization();
 
         app.MapControllers();
+
+        app.PrepareDatabase();
     }
 }

@@ -8,6 +8,8 @@ public class MockUserRepository : Mock<IUserRepository>
 {
     public MockUserRepository() : base(MockBehavior.Strict) { }
 
+    #region Mock
+
     public MockUserRepository MockAddAsync(User user)
     {
         Setup(x => x.AddAsync(It.Is<User>(x => 
@@ -20,4 +22,25 @@ public class MockUserRepository : Mock<IUserRepository>
 
         return this;
     }
+
+    public MockUserRepository MockFindByEmailAsync(string email, User? user)
+    {
+        Setup(x => x.FindByEmailAsync(email))
+            .ReturnsAsync(user);
+
+        return this;
+    }
+
+    #endregion
+
+    #region Verify
+
+    public MockUserRepository VerifyFindByEmailAsync(string email, Times times)
+    {
+        Verify(x => x.FindByEmailAsync(email), times);
+
+        return this;
+    }
+
+    #endregion
 }
