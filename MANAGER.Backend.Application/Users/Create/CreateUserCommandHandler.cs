@@ -20,23 +20,38 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
 
     public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = new User
+        try
         {
-            Name = request.Name,
-            Email = request.Email,
-            LastName = request.LastName,
-            Age = request.Age,
-        };
+            var user = await _userRepository.FindByEmailAsync(request.Email);
+            if (user is not null)
+            {
+                return Result.Fail(ConflictError.UserAlreadyExists());
+            }
 
-        var valid = _validator.Validate(user);
+            var userToAdd = new User
+            {
+                Name = request.Name,
+                Email = request.Email,
+                LastName = request.LastName,
+                Age = request.Age,
+            };
 
-        if (!valid.IsValid)
-        {
-            return Result.Fail(BadRequestError.InvalidFields());
+            var valid = _validator.Validate(userToAdd);
+
+            if (!valid.IsValid)
+            {
+                return Result.Fail(BadRequestError.InvalidFields());
+            }
+
+            await _userRepository.AddAsync(userToAdd);
+
+            return Result.Ok();
         }
-
-        await _userRepository.AddAsync(user);
-
-        return Result.Ok();
+        catch (Exception ex)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(ex.Message);
+            throw;
+        }
+        
     }
 }

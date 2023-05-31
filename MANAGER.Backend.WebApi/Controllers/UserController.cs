@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace MANAGER.Backend.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class UserController : Controller
+    [Route("api/[controller]")]
+    public class UserController : BaseController
     {
         private readonly IMediator _mediator;
         public UserController(IMediator mediator)
@@ -15,7 +15,7 @@ namespace MANAGER.Backend.WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("api/create-user")]
+        [HttpPost("create-user")]
         public async Task<IActionResult> CreateUserAsync(UserInput userInput)
         {
             var command = new CreateUserCommand(userInput.Name, userInput.LastName, userInput.Email, userInput.Age);
@@ -24,7 +24,7 @@ namespace MANAGER.Backend.WebApi.Controllers
 
             if (result.IsFailed)
             {
-                return BadRequest();
+                return FluentResult(result);
             }
 
             return Ok();

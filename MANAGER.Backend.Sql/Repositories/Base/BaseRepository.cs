@@ -7,7 +7,7 @@ namespace MANAGER.Backend.Sql.Repositories.Base
     public class BaseRepository<TEntity> : IBaseRepository<TEntity>
         where TEntity : class
     {
-        private readonly ManagerContext _context;
+        protected readonly ManagerContext _context;
 
         public BaseRepository(ManagerContext context)
         {

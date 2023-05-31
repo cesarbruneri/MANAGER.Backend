@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  manager.backend.webapi:
+    image: ${DOCKER_REGISTRY-}managerbackendwebapi
+    build:
+      context: .
+      dockerfile: MANAGER.Backend.WebApi/Dockerfile
+      
+  

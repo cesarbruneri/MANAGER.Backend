@@ -1,0 +1,17 @@
+version: '3.4'
+#https://www.youtube.com/watch?v=3lOrtJtG2rw
+services:
+  manager.backend.webapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+   
+  sqldata:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "yourStrong(!)Password"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
