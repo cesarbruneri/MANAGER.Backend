@@ -35,7 +35,5 @@ public class Startup
         app.UseAuthorization();
 
         app.MapControllers();
-
-        app.PrepareDatabase();
     }
 }

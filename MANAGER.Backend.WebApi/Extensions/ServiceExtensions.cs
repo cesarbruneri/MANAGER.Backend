@@ -2,6 +2,7 @@
 using FluentValidation;
 using MANAGER.Backend.Application.IRepositories;
 using MANAGER.Backend.Application.Users.Create;
+using MANAGER.Backend.Application.Users.Query;
 using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.Core.Validator;
 using MANAGER.Backend.Sql.Infrastructure.Context;
@@ -23,11 +24,11 @@ public static class ServiceExtensions
 
         return services;
     }
-    //https://www.youtube.com/watch?v=Bz5JCbWnaHo
+
     public static IServiceCollection AddDependenceInjection(this IServiceCollection services)
     {
-        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.RepositoryDependenceInjection();
+        services.MediatorDependenceInjection();
 
         return services;
     }
@@ -43,7 +44,22 @@ public static class ServiceExtensions
     {
         services.AddMediatR(cfg =>
         cfg.RegisterServicesFromAssemblyContaining<Startup>());
+
+        return services;
+    }
+
+    private static IServiceCollection MediatorDependenceInjection(this IServiceCollection services)
+    {
         services.AddTransient<IRequestHandler<CreateUserCommand, Result>, CreateUserCommandHandler>();
+        services.AddTransient<IRequestHandler<GetAllUsersQuery, Result<List<User>>>, GetAllUsersQueryHandler>();
+
+        return services;
+    }
+
+    private static IServiceCollection RepositoryDependenceInjection(this IServiceCollection services)
+    {
+        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }

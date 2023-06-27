@@ -18,10 +18,12 @@ public class UserScenarios : BaseFixture
     public async Task Post_NewUser_ReturnOk()
     {
         // Arrange
+        var userName = $"NewUserName_{Guid.NewGuid()}";
+
         var userInput = new UserInput
         {
-            Name = "name",
-            Email = "test@test.com",
+            Name = userName,
+            Email = $"{userName}@test.com",
             LastName = "name",
             Age = 32,
         };
@@ -39,19 +41,22 @@ public class UserScenarios : BaseFixture
     public async Task Post_UserExists_ReturnError()
     {
         // Arrange
+        var userName = $"NewUserName_{Guid.NewGuid()}";
+        var userEmail = $"{userName}@test.com";
+
         var userInput = new UserInput
         {
-            Name = "name",
-            Email = "email",
+            Name = userName,
+            Email = userEmail,
             LastName = "name",
             Age = 32,
         };
 
         var user = new User
         {
-            Name = "name",
-            Email = "email",
-            LastName = "name",
+            Name = userName,
+            Email = userEmail,
+            LastName = "lastName",
             Age = 32,
         };
 
@@ -63,14 +68,53 @@ public class UserScenarios : BaseFixture
             .PostAsync("api/user/create-user", GenerateRequestContent(userInput));
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Conflict);        
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
 
-        var errorResult = await GetDeserealizeContent(response.Content);
+        var errorResult = await GetDeserealizeContent<ErrorResponseTest>(response.Content);
         errorResult.Should().NotBeNull();
         errorResult?.Errors?.FirstOrDefault()?.Reason.Should().BeEquivalentTo("useralreadyexists");
     }
 
-    private static async Task<ErrorResponseTest> GetDeserealizeContent(HttpContent resultContent)
+    [Fact]
+    public async Task Post_GetAllUsers_ReturnUsers()
+    {
+        // Arrange
+        var userNameOne = $"NewUserName_{Guid.NewGuid()}";
+        var userNameTwo = $"NewUserName_{Guid.NewGuid()}";
+
+        var users = new List<User>
+        {
+            new User
+            {
+                Name = userNameOne,
+                Email = $"{userNameOne}@test.com",
+                LastName = "cesar",
+                Age = 30,
+            },
+            new User
+            {
+                Name = userNameTwo,
+                Email = $"{userNameTwo}@test.com",
+                LastName = "bruneri",
+                Age = 32,
+            }
+        };
+
+        await TestManagerContext.AddRangeAsync(users);
+        TestManagerContext.SaveChanges();
+
+        // Act
+        HttpResponseMessage response = await _client
+            .GetAsync("api/user/all-users");
+
+        // Assert
+
+        var result = await GetDeserealizeContent<List<User>>(response.Content);
+        result.Should().NotBeNull();
+        result.Should().Contain(users);
+    }
+
+    private static async Task<T?> GetDeserealizeContent<T>(HttpContent resultContent)
     {
         var content = await resultContent.ReadAsStringAsync();
         var options = new JsonSerializerOptions
@@ -78,7 +122,7 @@ public class UserScenarios : BaseFixture
             PropertyNameCaseInsensitive = true
         };
 
-        return JsonSerializer.Deserialize<ErrorResponseTest>(content, options) ?? new ErrorResponseTest();
+        return JsonSerializer.Deserialize<T>(content, options);
     }
 
     private static StringContent? GenerateRequestContent(UserInput userInput)

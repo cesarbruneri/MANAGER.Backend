@@ -7,7 +7,10 @@ namespace MANAGER.Backend.Sql.Infrastructure.Context;
 public class ManagerContext : DbContext
 {
     public ManagerContext(DbContextOptions<ManagerContext> opt)
-        : base(opt) { }
+        : base(opt) 
+    { 
+        Database.EnsureCreated(); 
+    }
 
     public DbSet<User> Users { get; set; }
 
