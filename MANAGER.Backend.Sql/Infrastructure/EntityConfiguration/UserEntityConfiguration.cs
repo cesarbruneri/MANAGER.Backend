@@ -31,5 +31,10 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         builder
             .Property(x => x.Password)
             .HasColumnType("varchar(100)");
+
+        builder
+            .HasMany(u => u.Permissions)
+            .WithOne(p => p.User)
+            .HasForeignKey(p => p.UserId);
     }
 }
