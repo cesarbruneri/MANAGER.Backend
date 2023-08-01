@@ -2,6 +2,7 @@
 using FluentValidation;
 using MANAGER.Backend.Application.IRepositories;
 using MANAGER.Backend.Application.Users.Create;
+using MANAGER.Backend.Application.Users.Login;
 using MANAGER.Backend.Application.Users.Query;
 using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.Core.Validator;
@@ -9,7 +10,10 @@ using MANAGER.Backend.Sql.Infrastructure.Context;
 using MANAGER.Backend.Sql.Repositories.Base;
 using MANAGER.Backend.Sql.Repositories.Users;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace MANAGER.Backend.WebApi.Extensions;
 
@@ -21,6 +25,32 @@ public static class ServiceExtensions
             opt =>
                 opt.UseSqlServer(configuration.GetConnectionString("Default"))
                 .EnableSensitiveDataLogging());
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
+    {
+        var key = Encoding.ASCII.GetBytes(configuration["Auth:Secret"]);
+
+        services
+            .AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+            });
 
         return services;
     }
@@ -52,6 +82,7 @@ public static class ServiceExtensions
     {
         services.AddTransient<IRequestHandler<CreateUserCommand, Result>, CreateUserCommandHandler>();
         services.AddTransient<IRequestHandler<GetAllUsersQuery, Result<List<User>>>, GetAllUsersQueryHandler>();
+        services.AddTransient<IRequestHandler<LoginCommand, Result<string>>, LoginCommandHandler>();
 
         return services;
     }

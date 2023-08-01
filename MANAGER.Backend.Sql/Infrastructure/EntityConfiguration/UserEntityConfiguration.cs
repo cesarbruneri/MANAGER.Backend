@@ -29,7 +29,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder
-            .Property(x => x.Age)
-            .HasColumnType("integer");
+            .Property(x => x.Password)
+            .HasColumnType("varchar(100)");
     }
 }

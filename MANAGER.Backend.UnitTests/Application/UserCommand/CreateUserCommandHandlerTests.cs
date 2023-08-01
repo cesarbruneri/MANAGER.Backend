@@ -2,6 +2,7 @@
 using FluentResults;
 using FluentValidation.Results;
 using MANAGER.Backend.Application.Users.Create;
+using MANAGER.Backend.Core.Constants;
 using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.Core.Errors;
 using MANAGER.Backend.Core.Extensions;
@@ -35,10 +36,10 @@ public class CreateUserCommandHandlerTests
             Name = "Test",
             LastName = "Test",
             Email = "Test@Test.com",
-            Age = 1,
+            Password = "password",
         };
 
-        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Age);
+        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Password);
 
         _mockValidate.MockValidate(new());
         _mockUserRepository
@@ -65,10 +66,10 @@ public class CreateUserCommandHandlerTests
             Name = "Test",
             LastName = "Test",
             Email = "Test@Test.com",
-            Age = 0,
+            Password = "password",
         };
 
-        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Age);
+        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Password);
 
         var error = new ValidationFailure();
 
@@ -97,10 +98,10 @@ public class CreateUserCommandHandlerTests
             Name = "Test",
             LastName = "Test",
             Email = "Test@Test.com",
-            Age = 0,
+            Password = "password",
         };
 
-        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Age);
+        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Password);
 
         var error = new ValidationFailure();
 

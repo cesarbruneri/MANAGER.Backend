@@ -13,6 +13,6 @@ public class UserInput
     [JsonPropertyName("email")]
     public required string Email { get; set; }
 
-    [JsonPropertyName("age")]
-    public int Age { get; set; }
+    [JsonPropertyName("password")]
+    public required string Password { get; set; }
 }

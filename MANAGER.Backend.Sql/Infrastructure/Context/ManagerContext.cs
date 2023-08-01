@@ -9,7 +9,7 @@ public class ManagerContext : DbContext
     public ManagerContext(DbContextOptions<ManagerContext> opt)
         : base(opt) 
     { 
-        Database.EnsureCreated(); 
+        Database.EnsureCreated();
     }
 
     public DbSet<User> Users { get; set; }

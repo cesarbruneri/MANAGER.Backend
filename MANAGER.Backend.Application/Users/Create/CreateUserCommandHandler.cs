@@ -1,6 +1,7 @@
 ﻿using FluentResults;
 using FluentValidation;
 using MANAGER.Backend.Application.IRepositories;
+using MANAGER.Backend.Core.Constants;
 using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.Core.Errors;
 using MediatR;
@@ -33,7 +34,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
                 Name = request.Name,
                 Email = request.Email,
                 LastName = request.LastName,
-                Age = request.Age,
+                Password = request.Password,
             };
 
             var valid = _validator.Validate(userToAdd);

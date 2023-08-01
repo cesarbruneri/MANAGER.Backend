@@ -16,7 +16,7 @@ public class MockUserRepository : Mock<IUserRepository>
             x.Name == user.Name &&
             x.LastName == user.LastName &&
             x.Email == user.Email &&
-            x.Age == user.Age
+            x.Password == user.Password
             )))
             .Returns(Task.CompletedTask);
 

@@ -1,6 +1,4 @@
-﻿using MANAGER.Backend.Sql.Infrastructure.Context;
-using MANAGER.Backend.WebApi.Extensions;
-using Microsoft.EntityFrameworkCore;
+﻿using MANAGER.Backend.WebApi.Extensions;
 
 namespace MANAGER.Backend.WebApi;
 
@@ -21,6 +19,7 @@ public class Startup
         services.AddValidatorDependenceInjection();
         services.AddDependenceInjection();
         services.AddEndpointsApiExplorer();
+        services.ConfigureAuthentication(Configuration);
         services.AddSwaggerGen();
     }
 
@@ -32,6 +31,7 @@ public class Startup
             app.UseSwaggerUI();
         }
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

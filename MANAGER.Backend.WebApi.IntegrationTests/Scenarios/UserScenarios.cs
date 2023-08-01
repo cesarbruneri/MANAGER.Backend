@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using MANAGER.Backend.Core.Constants;
 using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.WebApi.IntegrationTests.Helper;
 using MANAGER.Backend.WebApi.IntegrationTests.Infrastructure;
@@ -25,7 +26,7 @@ public class UserScenarios : BaseFixture
             Name = userName,
             Email = $"{userName}@test.com",
             LastName = "name",
-            Age = 32,
+            Password = "password",
         };
 
         // Act
@@ -49,7 +50,7 @@ public class UserScenarios : BaseFixture
             Name = userName,
             Email = userEmail,
             LastName = "name",
-            Age = 32,
+            Password = "password",
         };
 
         var user = new User
@@ -57,7 +58,7 @@ public class UserScenarios : BaseFixture
             Name = userName,
             Email = userEmail,
             LastName = "lastName",
-            Age = 32,
+            Password = "password",
         };
 
         TestManagerContext.Add(user);
@@ -89,14 +90,14 @@ public class UserScenarios : BaseFixture
                 Name = userNameOne,
                 Email = $"{userNameOne}@test.com",
                 LastName = "cesar",
-                Age = 30,
+                Password = "password",
             },
             new User
             {
                 Name = userNameTwo,
                 Email = $"{userNameTwo}@test.com",
                 LastName = "bruneri",
-                Age = 32,
+            Password = "password",
             }
         };
 
