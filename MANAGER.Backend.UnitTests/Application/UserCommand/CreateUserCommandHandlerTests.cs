@@ -3,6 +3,7 @@ using FluentResults;
 using FluentValidation.Results;
 using MANAGER.Backend.Application.Users.Create;
 using MANAGER.Backend.Core.Constants;
+using MANAGER.Backend.Core.Domain.Entities.UserPermissions;
 using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.Core.Errors;
 using MANAGER.Backend.Core.Extensions;
@@ -31,15 +32,17 @@ public class CreateUserCommandHandlerTests
     public async Task Handle_CreateUser_ReturnOk()
     {
         // Arrange 
-        var user = new User
-        {
-            Name = "Test",
-            LastName = "Test",
-            Email = "Test@Test.com",
-            Password = "password",
-        };
+        var permissions = new List<Roles> { Roles.Admin };
 
-        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Password);
+        var user = new User(
+            "Test",
+            "Test",
+            "Test@Test.com",
+            "password",
+            permissions
+        );
+
+        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Password, permissions);
 
         _mockValidate.MockValidate(new());
         _mockUserRepository
@@ -61,15 +64,17 @@ public class CreateUserCommandHandlerTests
     public async Task Handle_CreateUserWhenInvalidUserData_ReturnError()
     {
         // Arrange 
-        var user = new User
-        {
-            Name = "Test",
-            LastName = "Test",
-            Email = "Test@Test.com",
-            Password = "password",
-        };
+        var permissions = new List<Roles> { Roles.Admin };
 
-        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Password);
+        var user = new User(
+            "Test",
+            "Test",
+            "Test@Test.com",
+            "password",
+            permissions
+        );
+
+        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Password, permissions);
 
         var error = new ValidationFailure();
 
@@ -93,15 +98,17 @@ public class CreateUserCommandHandlerTests
     public async Task Handle_UserAlreadyExists_ReturnError()
     {
         // Arrange 
-        var user = new User
-        {
-            Name = "Test",
-            LastName = "Test",
-            Email = "Test@Test.com",
-            Password = "password",
-        };
+        var permissions = new List<Roles> { Roles.Admin };
 
-        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Password);
+        var user = new User(
+            "Test",
+            "Test",
+            "Test@Test.com",
+            "password",
+            permissions
+        );
+
+        var request = new CreateUserCommand(user.Name, user.LastName, user.Email, user.Password, permissions);
 
         var error = new ValidationFailure();
 

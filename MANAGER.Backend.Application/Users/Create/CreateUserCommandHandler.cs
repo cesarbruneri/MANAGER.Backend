@@ -2,6 +2,7 @@
 using FluentValidation;
 using MANAGER.Backend.Application.IRepositories;
 using MANAGER.Backend.Core.Constants;
+using MANAGER.Backend.Core.Domain.Entities.UserPermissions;
 using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.Core.Errors;
 using MediatR;
@@ -29,13 +30,12 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
                 return Result.Fail(ConflictError.UserAlreadyExists());
             }
 
-            var userToAdd = new User
-            {
-                Name = request.Name,
-                Email = request.Email,
-                LastName = request.LastName,
-                Password = request.Password,
-            };
+            var userToAdd = new User(
+                request.Name, 
+                request.LastName, 
+                request.Email, 
+                request.Password, 
+                request.Permissions);
 
             var valid = _validator.Validate(userToAdd);
 

@@ -17,4 +17,13 @@ public class UserRepository : BaseRepository<User>, IUserRepository
             .AsNoTracking().
             FirstOrDefaultAsync();
     }
+
+    public async Task<User?> FindByEmailIncludePermissionAsync(string email)
+    {
+        return await _context.Users.Where(x =>
+        x.Email == email.ToLowerInvariant())
+            .Include(x => x.Permissions)
+            .AsNoTracking().
+            FirstOrDefaultAsync();
+    }
 }

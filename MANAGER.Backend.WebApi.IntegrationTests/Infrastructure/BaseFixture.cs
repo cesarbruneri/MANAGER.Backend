@@ -1,4 +1,5 @@
-﻿using MANAGER.Backend.Core.Domain.Entities.Users;
+﻿using MANAGER.Backend.Core.Constants;
+using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.Sql.Infrastructure.Context;
 using MANAGER.Backend.WebApi.Model;
 using Microsoft.EntityFrameworkCore;
@@ -53,13 +54,16 @@ public class BaseFixture : IClassFixture<CustomWebApplicationFactory<Startup>>
 
     public async Task GenerateToken()
     {
+        var permissions = new List<Roles> { Roles.Admin, Roles.Manager };
+
         var user = new User
-        {
-            Name = "Admin",
-            Email = $"Admin@test.com",
-            LastName = "Admin",
-            Password = "password",
-        };
+        (
+            "Admin",
+            $"Admin@test.com",
+            "Admin",
+            "password",
+            permissions
+        );
 
         var result = await TestManagerContext.Users.FirstOrDefaultAsync(x => x.Email == user.Email);
 

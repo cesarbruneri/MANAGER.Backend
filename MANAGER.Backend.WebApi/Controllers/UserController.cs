@@ -24,7 +24,7 @@ namespace MANAGER.Backend.WebApi.Controllers
         [CustomAuthorize(Roles.Admin, Roles.Manager)]
         public async Task<IActionResult> CreateUserAsync(UserInput userInput)
         {
-            var command = new CreateUserCommand(userInput.Name, userInput.LastName, userInput.Email, userInput.Password);
+            var command = new CreateUserCommand(userInput.Name, userInput.LastName, userInput.Email, userInput.Password, userInput.Permissions);
 
             var result = await _mediator.Send(command);
 

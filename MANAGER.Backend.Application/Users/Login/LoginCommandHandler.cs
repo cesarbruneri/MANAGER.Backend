@@ -30,7 +30,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<string>>
 
     public async Task<Result<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.FindByEmailAsync(request.UserEmail);
+        var user = await _userRepository.FindByEmailIncludePermissionAsync(request.UserEmail);
         if (user is null)
         {
             return Result.Fail(NotFoundError.UserNotFound());
@@ -54,8 +54,13 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<string>>
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, Roles.Manager.ToString()),
             });
+
+        foreach (var Permission in user.Permissions)
+        {
+            var claim = new Claim(ClaimTypes.Role, Permission.Role.ToString());
+            claims.AddClaim(claim);
+        }
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

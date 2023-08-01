@@ -13,13 +13,15 @@ public class UserValidatorTests
     {
         // Arrange 
         var userValidator = new UserValidator();
-        var user = new User
-        {
-            Name = "Test",
-            LastName = "Test",
-            Email = "test@test.com",
-            Password = "password",
-        };
+        var permissions = new List<Roles> { Roles.Admin };
+
+        var user = new User(
+            "Test",
+            "Test",
+            "Test@Test.com",
+            "password",
+            permissions
+        );
 
         // Act
         var result = userValidator.Validate(user);
@@ -33,13 +35,15 @@ public class UserValidatorTests
     {
         // Arrange 
         var userValidator = new UserValidator();
+        var permissions = new List<Roles> { Roles.Admin };
         var user = new User
-        {
-            Name = string.Empty,
-            LastName = "Test",
-            Email = "Test",
-            Password = "password",
-        };
+        (
+            string.Empty,
+            "Test",
+            "Test",
+            "password",
+            permissions
+        );
 
         // Act
         var result = userValidator.Validate(user);
@@ -53,13 +57,15 @@ public class UserValidatorTests
     {
         // Arrange 
         var userValidator = new UserValidator();
+        var permissions = new List<Roles> { Roles.Admin };
         var user = new User
-        {
-            Name = "Test",
-            LastName = string.Empty,
-            Email = "Test",
-            Password = "password",
-        };
+        (
+            "Test",
+            string.Empty,
+            "Test",
+            "password",
+            permissions
+        );
 
         // Act
         var result = userValidator.Validate(user);
