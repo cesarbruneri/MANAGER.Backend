@@ -1,19 +1,18 @@
 ﻿using FluentAssertions;
-using MANAGER.Backend.Core.Constants;
 using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.WebApi.IntegrationTests.Helper;
 using MANAGER.Backend.WebApi.IntegrationTests.Infrastructure;
 using MANAGER.Backend.WebApi.Model;
 using System.Net;
-using System.Text;
-using System.Text.Json;
 using Xunit;
 
 namespace MANAGER.Backend.WebApi.IntegrationTests.Scenarios;
 
 public class UserScenarios : BaseFixture
 {
-    public UserScenarios(CustomWebApplicationFactory<Startup> factory) : base(factory) { }
+    private string _token;
+    public UserScenarios(CustomWebApplicationFactory<Startup> factory)
+    : base(factory) { }
 
     [Fact]
     public async Task Post_NewUser_ReturnOk()
@@ -113,22 +112,5 @@ public class UserScenarios : BaseFixture
         var result = await GetDeserealizeContent<List<User>>(response.Content);
         result.Should().NotBeNull();
         result.Should().Contain(users);
-    }
-
-    private static async Task<T?> GetDeserealizeContent<T>(HttpContent resultContent)
-    {
-        var content = await resultContent.ReadAsStringAsync();
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-
-        return JsonSerializer.Deserialize<T>(content, options);
-    }
-
-    private static StringContent? GenerateRequestContent(UserInput userInput)
-    {
-        var json = JsonSerializer.Serialize(userInput);
-        return new StringContent(json, Encoding.UTF8, "application/json");
     }
 }
