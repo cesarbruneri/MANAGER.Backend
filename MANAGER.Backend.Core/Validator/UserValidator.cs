@@ -17,7 +17,12 @@ public class UserValidator : AbstractValidator<User>
         RuleFor(x => x.LastName)
             .NotEmpty();
 
-        RuleFor(x => x.Age)
-            .GreaterThan(0);
+        RuleFor(x => x.Password)
+            .NotEmpty()
+            .NotNull();
+
+        RuleFor(x => x.Permissions)
+            .NotEmpty()
+            .NotNull();
     }
 }

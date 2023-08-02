@@ -1,16 +1,33 @@
-﻿using MANAGER.Backend.Core.Domain.Entities.Base;
+﻿using MANAGER.Backend.Core.Constants;
+using MANAGER.Backend.Core.Domain.Entities.Base;
+using MANAGER.Backend.Core.Domain.Entities.UserPermissions;
 
 namespace MANAGER.Backend.Core.Domain.Entities.Users;
 
 public class User : EntityBase
 {
-    public required string Name { get; set; }
+    public User(string name, string lastName, string email, string password, List<Roles> permissions)
+    {
+        Name = name;
+        LastName = lastName;
+        Email = email;
+        Password = password;
+        Permissions = new List<UserPermission>();
 
-    public required string LastName { get; set; }
+        AddPermission(permissions);
+    }
 
-    public required string Email { get; set; }
+    public User() { }
 
-    public int Age { get; set; }
+    public string Name { get; set; }
+
+    public string LastName { get; set; }
+
+    public string Email { get; set; }
+
+    public string Password { get; set; }
+
+    public ICollection<UserPermission> Permissions { get; private set; }
 
     public override bool Equals(object obj)
     {
@@ -19,14 +36,28 @@ public class User : EntityBase
 
         User otherUser = (User)obj;
 
-        return Name == otherUser.Name &&
+        return Id == otherUser.Id &&
+               Name == otherUser.Name &&
                LastName == otherUser.LastName &&
-               Email == otherUser.Email &&
-               Age == otherUser.Age;
+               Email == otherUser.Email;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Name, LastName, Email, Age);
+        return HashCode.Combine(Id, Name, LastName, Email);
+    }
+
+    private void AddPermission(List<Roles>? permissions)
+    {
+        permissions?.ForEach(role =>
+        {
+            var permission = new UserPermission
+            {
+                UserId = Id,
+                User = this,
+                Role = role,
+            };
+            Permissions.Add(permission);
+        });
     }
 }

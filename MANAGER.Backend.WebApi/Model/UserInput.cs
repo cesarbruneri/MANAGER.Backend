@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using MANAGER.Backend.Core.Constants;
+using System.Text.Json.Serialization;
 
 namespace MANAGER.Backend.WebApi.Model;
 
@@ -13,6 +14,9 @@ public class UserInput
     [JsonPropertyName("email")]
     public required string Email { get; set; }
 
-    [JsonPropertyName("age")]
-    public int Age { get; set; }
+    [JsonPropertyName("password")]
+    public required string Password { get; set; }
+
+    [JsonPropertyName("permissions")]
+    public required List<Roles> Permissions { get; set; }
 }

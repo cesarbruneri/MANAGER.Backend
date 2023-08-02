@@ -5,4 +5,6 @@ namespace MANAGER.Backend.Application.IRepositories;
 public interface IUserRepository : IBaseRepository<User>
 {
     Task<User?> FindByEmailAsync(string email);
+
+    Task<User?> FindByEmailIncludePermissionAsync(string email);
 }

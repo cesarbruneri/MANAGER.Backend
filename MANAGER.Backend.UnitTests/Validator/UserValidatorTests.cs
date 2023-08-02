@@ -1,12 +1,7 @@
 ﻿using FluentAssertions;
-using FluentValidation;
+using MANAGER.Backend.Core.Constants;
 using MANAGER.Backend.Core.Domain.Entities.Users;
 using MANAGER.Backend.Core.Validator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace MANAGER.Backend.UnitTests.Validator;
@@ -18,13 +13,15 @@ public class UserValidatorTests
     {
         // Arrange 
         var userValidator = new UserValidator();
-        var user = new User
-        {
-            Name = "Test",
-            LastName = "Test",
-            Email = "test@test.com",
-            Age = 1,
-        };
+        var permissions = new List<Roles> { Roles.Admin };
+
+        var user = new User(
+            "Test",
+            "Test",
+            "Test@Test.com",
+            "password",
+            permissions
+        );
 
         // Act
         var result = userValidator.Validate(user);
@@ -38,13 +35,15 @@ public class UserValidatorTests
     {
         // Arrange 
         var userValidator = new UserValidator();
+        var permissions = new List<Roles> { Roles.Admin };
         var user = new User
-        {
-            Name = string.Empty,
-            LastName = "Test",
-            Email = "Test",
-            Age = 1,
-        };
+        (
+            string.Empty,
+            "Test",
+            "Test",
+            "password",
+            permissions
+        );
 
         // Act
         var result = userValidator.Validate(user);
@@ -58,13 +57,15 @@ public class UserValidatorTests
     {
         // Arrange 
         var userValidator = new UserValidator();
+        var permissions = new List<Roles> { Roles.Admin };
         var user = new User
-        {
-            Name = "Test",
-            LastName = string.Empty,
-            Email = "Test",
-            Age = 1,
-        };
+        (
+            "Test",
+            string.Empty,
+            "Test",
+            "password",
+            permissions
+        );
 
         // Act
         var result = userValidator.Validate(user);
@@ -74,17 +75,19 @@ public class UserValidatorTests
     }
 
     [Fact]
-    public void Validate_UserHasAgeLessThanOne_IsValidFalse()
+    public void Validate_UserHasNoPassword_IsValidFalse()
     {
         // Arrange 
         var userValidator = new UserValidator();
+        var permissions = new List<Roles> { Roles.Admin };
         var user = new User
-        {
-            Name = "Test",
-            LastName = string.Empty,
-            Email = "Test",
-            Age = 0,
-        };
+        (
+            "Test",
+            "password",
+            "Test",
+            string.Empty,
+            permissions
+        );
 
         // Act
         var result = userValidator.Validate(user);

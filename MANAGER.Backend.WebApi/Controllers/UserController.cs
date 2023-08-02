@@ -1,9 +1,12 @@
 ﻿using MANAGER.Backend.Application.Users.Create;
 using MANAGER.Backend.Application.Users.Query;
+using MANAGER.Backend.Core.Constants;
+using MANAGER.Backend.WebApi.Infraestructure;
 using MANAGER.Backend.WebApi.Model;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace MANAGER.Backend.WebApi.Controllers
 {
@@ -18,9 +21,10 @@ namespace MANAGER.Backend.WebApi.Controllers
         }
 
         [HttpPost("create-user")]
+        [CustomAuthorize(Roles.Admin, Roles.Manager)]
         public async Task<IActionResult> CreateUserAsync(UserInput userInput)
         {
-            var command = new CreateUserCommand(userInput.Name, userInput.LastName, userInput.Email, userInput.Age);
+            var command = new CreateUserCommand(userInput.Name, userInput.LastName, userInput.Email, userInput.Password, userInput.Permissions);
 
             var result = await _mediator.Send(command);
 
@@ -33,6 +37,7 @@ namespace MANAGER.Backend.WebApi.Controllers
         }
 
         [HttpGet("all-users")]
+        [CustomAuthorize(Roles.Admin, Roles.Manager)]
         public async Task<IActionResult> GetAllUsersAsync()
         {
             var query = new GetAllUsersQuery();
