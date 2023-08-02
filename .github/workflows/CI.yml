@@ -26,5 +26,6 @@ jobs:
       run: dotnet build MANAGER.Backend.sln --no-restore
     - name: Test
       run: | 
-        cd .\MANAGER.Backend.UnitTests\
-        dotnet run MANAGER.Backend.UnitTests.csproj --no-build --verbosity normal
+        cd .\MANAGER.Backend.UnitTests
+        dir
+        dotnet run test --no-build --verbosity normal
