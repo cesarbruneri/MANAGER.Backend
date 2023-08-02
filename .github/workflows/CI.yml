@@ -27,4 +27,4 @@ jobs:
     - name: Test
       run: | 
         cd ./MANAGER.Backend.UnitTests
-        dotnet run test --no-build --verbosity normal --list-tests
+        dotnet test --no-build --verbosity normal --list-tests
