@@ -11,7 +11,6 @@ namespace MANAGER.Backend.WebApi.IntegrationTests.Scenarios;
 
 public class UserScenarios : BaseFixture
 {
-    private string _token;
     public UserScenarios(CustomWebApplicationFactory<Startup> factory)
     : base(factory) { }
 

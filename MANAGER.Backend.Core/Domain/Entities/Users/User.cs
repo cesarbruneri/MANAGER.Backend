@@ -17,10 +17,7 @@ public class User : EntityBase
         AddPermission(permissions);
     }
 
-    public User()
-    {
-        
-    }
+    public User() { }
 
     public string Name { get; set; }
 

@@ -30,12 +30,14 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
                 return Result.Fail(ConflictError.UserAlreadyExists());
             }
 
+            var permissions = request.Permissions ?? new List<Roles> { Roles.Employee };
+
             var userToAdd = new User(
                 request.Name, 
                 request.LastName, 
                 request.Email, 
-                request.Password, 
-                request.Permissions);
+                request.Password,
+                permissions);
 
             var valid = _validator.Validate(userToAdd);
 

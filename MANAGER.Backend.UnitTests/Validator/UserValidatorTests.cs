@@ -73,4 +73,26 @@ public class UserValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
     }
+
+    [Fact]
+    public void Validate_UserHasNoPassword_IsValidFalse()
+    {
+        // Arrange 
+        var userValidator = new UserValidator();
+        var permissions = new List<Roles> { Roles.Admin };
+        var user = new User
+        (
+            "Test",
+            "password",
+            "Test",
+            string.Empty,
+            permissions
+        );
+
+        // Act
+        var result = userValidator.Validate(user);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
 }
