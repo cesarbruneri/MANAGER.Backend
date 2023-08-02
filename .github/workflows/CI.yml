@@ -28,4 +28,4 @@ jobs:
       run: | 
         cd ./MANAGER.Backend.UnitTests
         ls -la
-        dotnet run test --no-build --verbosity normal
+        dotnet run test --no-build --verbosity normal -t
