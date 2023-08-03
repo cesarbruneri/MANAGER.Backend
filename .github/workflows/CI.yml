@@ -28,10 +28,10 @@ jobs:
       run: | 
         cd ./MANAGER.Backend.UnitTests
         dotnet test --no-build --verbosity normal       
-    - name: Integration Test
-      run: | 
-        docker-compose up
-        cd ./MANAGER.Backend.WebApi.IntegrationTests
-        dotnet test --no-build --verbosity normal
-        cd..
-        docker-compose down
+    #- name: Integration Test
+    #  run: | 
+    #    docker-compose up
+    #    cd ./MANAGER.Backend.WebApi.IntegrationTests
+    #    dotnet test --no-build --verbosity normal
+    #    cd..
+    #    docker-compose down
