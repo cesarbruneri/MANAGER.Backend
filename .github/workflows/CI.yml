@@ -24,7 +24,11 @@ jobs:
       run: dotnet restore MANAGER.Backend.sln
     - name: Build
       run: dotnet build MANAGER.Backend.sln --no-restore
-    - name: Test
+    - name: Unit Test
       run: | 
         cd ./MANAGER.Backend.UnitTests
-        dotnet test --no-build --verbosity normal --list-tests
+        dotnet test --no-build --verbosity normal       
+    #- name: Integration Test
+    #  run: | 
+    #    cd ./MANAGER.Backend.WebApi.IntegrationTests
+    #    dotnet test --no-build --verbosity normal
