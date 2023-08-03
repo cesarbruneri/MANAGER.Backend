@@ -33,5 +33,5 @@ jobs:
         docker-compose up -d
         cd ./MANAGER.Backend.WebApi.IntegrationTests
         dotnet test --no-build --verbosity normal
-        cd..
+        cd ..
         docker-compose down
