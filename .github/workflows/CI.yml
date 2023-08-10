@@ -8,6 +8,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -32,6 +33,6 @@ jobs:
       run: | 
         docker-compose up -d
         cd ./MANAGER.Backend.WebApi.IntegrationTests
-        dotnet test --no-build --verbosity normal
+        dotnet test --no-restore --verbosity normal
         cd ..
         docker-compose down
