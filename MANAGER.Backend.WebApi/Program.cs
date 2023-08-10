@@ -1,8 +1,9 @@
-using MANAGER.Backend.Sql.Infrastructure.Context;
 using MANAGER.Backend.WebApi;
-using Microsoft.EntityFrameworkCore;
+using MANAGER.Backend.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.AddLog();
 
 var startup = new Startup(builder.Configuration);
 

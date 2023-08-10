@@ -11,11 +11,12 @@ namespace MANAGER.Backend.WebApi.Controllers
     public class LoginController : BaseController
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<LoginController> _logger;
 
-        //https://www.youtube.com/watch?v=vAUXU0YIWlU
-        public LoginController(IMediator mediator)
+        public LoginController(IMediator mediator, ILogger<LoginController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -24,6 +25,7 @@ namespace MANAGER.Backend.WebApi.Controllers
         public async Task<ActionResult<dynamic>> AuthenticateAsync(LoginInput loginInput)
         {
             var command = new LoginCommand(loginInput.Email, loginInput.Password);
+            _logger.LogInformation("api/authentication", loginInput);
 
             var result = await _mediator.Send(command);
 
