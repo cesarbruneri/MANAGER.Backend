@@ -23,7 +23,8 @@ public static class ServiceExtensions
     {
         services.AddDbContext<ManagerContext>(
             opt =>
-                opt.UseSqlServer(configuration.GetConnectionString("Default"))
+                opt
+                .UseSqlServer(configuration.GetConnectionString("Default"))
                 .EnableSensitiveDataLogging());
 
         return services;
